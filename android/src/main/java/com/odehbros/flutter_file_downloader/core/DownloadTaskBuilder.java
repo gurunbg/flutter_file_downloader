@@ -1,11 +1,13 @@
 package com.odehbros.flutter_file_downloader.core;
 
 import android.app.Activity;
+import java.util.Map;
 
 public class DownloadTaskBuilder {
     String url, name, downloadDestination;
     String notifications = "progressOnly";
     DownloadCallbacks callbacks;
+    Map<String, String> headers;
     final Activity activity;
     private DownloadTask task;
 
@@ -15,6 +17,11 @@ public class DownloadTaskBuilder {
 
     public DownloadTaskBuilder setUrl(final String url) {
         this.url = url;
+        return this;
+    }
+
+    public DownloadTaskBuilder setHeaders(final Map<String, String> headers) {
+        this.headers = headers;
         return this;
     }
 
@@ -41,7 +48,7 @@ public class DownloadTaskBuilder {
 
     public DownloadTask build() {
         if (task == null)
-            task = new DownloadTask(activity, url, name, notifications, downloadDestination, callbacks);
+            task = new DownloadTask(activity, url, name, notifications, downloadDestination, callbacks, headers);
         try {
             return getDownloadTask();
         } catch (Exception e) {

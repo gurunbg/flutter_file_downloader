@@ -69,6 +69,7 @@ class FileDownloader {
   static Future<File?> downloadFile({
     required final String url,
     final String? name,
+    final Map<String, String>? headers,
     final NotificationType notificationType = NotificationType.progressOnly,
     final DownloadDestinations downloadDestination =
         DownloadDestinations.publicDownloads,
@@ -85,6 +86,7 @@ class FileDownloader {
           onProgress: onProgress,
           onDownloadCompleted: onDownloadCompleted,
           onDownloadError: onDownloadError,
+          headers: headers,
         )
         .catchError((error) => throw error);
   }
@@ -151,6 +153,7 @@ class FileDownloader {
   Future<File?> _downloadFile({
     required final String url,
     final String? name,
+    final Map<String, String>? headers,
     required final NotificationType notificationType,
     required final DownloadDestinations downloadDestination,
     final OnProgress? onProgress,
@@ -169,6 +172,7 @@ class FileDownloader {
     final task = _DownloadTask(
       url: url.trim(),
       name: name?.trim(),
+      headers: headers,
       notificationType: notificationType,
       downloadDestination: downloadDestination,
       callbacks: DownloadCallbacks(
@@ -186,6 +190,7 @@ class FileDownloader {
         'key': task.key.toString(),
         'notifications': task.notificationType.name,
         'download_destination': task.downloadDestination.name,
+        'headers': task.headers,
         if (name?.trim().isNotEmpty ?? false) 'name': name!.trim(),
         'onprogress_named': onProgress?.toString(),
         'ondownloadcompleted': onDownloadCompleted?.toString(),

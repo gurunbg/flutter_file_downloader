@@ -9,6 +9,7 @@ class _DownloadTask {
   final NotificationType notificationType;
   final DownloadDestinations downloadDestination;
   final DownloadCallbacks callbacks;
+  final Map<String, String>? headers;
 
   final Completer _completer;
 
@@ -18,6 +19,7 @@ class _DownloadTask {
     this.name,
     this.notificationType = NotificationType.progressOnly,
     this.downloadDestination = DownloadDestinations.publicDownloads,
+    this.headers,
   }) : //key = DateTime.now().millisecondsSinceEpoch.toString(),
         _completer = Completer();
 

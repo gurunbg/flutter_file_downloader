@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import java.util.Map;
+import java.util.Set;
 
 import io.flutter.util.PathUtils;
 
@@ -18,20 +20,29 @@ public class DownloadTask {
     final String url, name, downloadDestination;
     final DownloadCallbacks callbacks;
     final String notifications;
+    final Map<String, String> headers;
     private boolean isDownloading = false;
 
-    public DownloadTask(Activity activity, String url, String name, String notifications, String downloadDestination, DownloadCallbacks callbacks) {
+
+    public DownloadTask(Activity activity, String url, String name, String notifications, String downloadDestination, DownloadCallbacks callbacks, Map<String, String> headers) {
         this.activity = activity;
         this.url = url;
         this.name = name;
         this.notifications = notifications;
         this.downloadDestination = downloadDestination;
         this.callbacks = callbacks;
+        this.headers = headers;
     }
 
     public void startDownloading(final Context context) {
         isDownloading = true;
         final DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        if(headers != null) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                request.addRequestHeader(entry.getKey(), entry.getValue());
+            }
+        }
 
         if ("appFiles".equals(downloadDestination)) {
             request.setDestinationInExternalFilesDir(activity, PathUtils.getFilesDir(activity), getDownloadedFileName());
